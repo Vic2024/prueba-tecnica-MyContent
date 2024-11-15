@@ -1,0 +1,59 @@
+---
+import { Image } from "astro:assets";
+import Logo from "../../public/Logo.jpg";
+import Conections from "@/components/Conections.astro";
+import { getCalls } from "@/helper/notion.ts";
+import Card from "@/components/Card.astro";
+interface Props {
+  database: string;
+}
+const { database } = Astro.props;
+const calls = await getCalls();
+---
+
+<aside
+  class="[grid-area:aside] bg-primary-color rounded-l-xl text-white flex flex-col"
+>
+  <div class="flex flex-col items-center justify-center mt-4">
+    <Image
+      src={Logo}
+      alt="Logo MyContent"
+      width="250"
+      height="45"
+      decoding="async"
+      loading="eager"
+    />
+    <Conections database={database} />
+  </div>
+  <ul
+    class="mx-6 my-12 border-2 min-h-[316px] max-h-[316px] bg-white rounded-xl text-black overflow-auto"
+  >
+    {
+      calls.map((call) => (
+        <Card
+          agendacion={call.agendacion}
+          email={call.email}
+          closer={call.closer}
+          status={call.status}
+        />
+      ))
+    }
+  </ul>
+</aside>
+<style>
+  ul::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+ul::-webkit-scrollbar-track {
+  background: white;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;        /* color of the tracking area */
+}
+
+ul::-webkit-scrollbar-thumb {
+  background-color: gray;    /* color of the scroll thumb */
+  border-radius: 12px;       /* roundness of the scroll thumb */
+  border: 3px solid gray;  /* creates padding around scroll thumb */
+}
+</style>

@@ -1,0 +1,27 @@
+---
+import { COLORS } from "@/constants/colors.ts";
+interface Props {
+  agendacion: string;
+  email: string;
+  closer: { name: string; color: string };
+  status: { name: string; color: string };
+  path: string;
+}
+
+const { agendacion, email, closer, status, path } = Astro.props;
+const color = status.color;
+---
+
+<a
+  class="shadow-1 m-2 rounded-lg flex flex-col gap-2 py-1 bg-white px-2"
+  href={`${path}/${email}`}
+>
+  <h2 class="text-h4 font-bold text-title-color">{email}</h2>
+  <h3 class="text-h5 font-medium text-gray-dark-color">{agendacion}</h3>
+  <span class="bg-[#58272d] text-white text-sm w-fit px-2 rounded-lg"
+    >{closer.name}</span
+  >
+  <span class={`${COLORS[color]} text-white text-sm w-fit px-2 rounded-lg`}
+    >{status.name}</span
+  >
+</a>

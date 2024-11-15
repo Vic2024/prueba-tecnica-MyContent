@@ -1,0 +1,17 @@
+---
+import EditCloser from "@/components/sections/EditCloser.astro";
+import { getPagesG } from "@/helper/googleSheet";
+
+const { id } = Astro.params;
+const getData = await getPagesG({
+  filterBy: {
+    option: "SearchEmail",
+    search: id
+  },
+});
+const data = getData.find((data:any) => data.email === id);
+if (!data) return Astro.redirect("/404");
+
+---
+<EditCloser id={id ?? ""} data={data} pathReturn="/google-sheet" />
+

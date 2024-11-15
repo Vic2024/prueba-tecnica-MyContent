@@ -1,0 +1,86 @@
+---
+import LayoutForm from "@/layouts/LayoutForm.astro";
+import Select from "../Select.astro";
+import Form from "../Form.astro";
+import FormSection from "../formSection.astro";
+import { OPTION_SELECT } from "@/constants/optionSelect";
+import type { FormInterface } from "@/types";
+interface Props extends FormInterface {}
+const { id, pathReturn, data } = Astro.props;
+---
+
+<LayoutForm title={`Editar a ${id}`} pathReturn={pathReturn}>
+  <Form id={id}>
+    <FormSection title="Agendacion" data={data.agendacion} />
+    <div class="flex flex-row gap-2 items-center">
+      <span class="font-bold text-lg">Estado:</span>
+      <Select
+        currentStatus={data.status.name}
+        color={data.status.color}
+        options={OPTION_SELECT}
+      />
+    </div>
+    <FormSection
+      title="UTM Source"
+      data={data.UTMSource || data.UTMSource.length > 0
+        ? data.UTMSource
+        : "No asignado"}
+    />
+    <FormSection
+      title="UTM Campaign"
+      data={data.UTMCampaign && data.UTMCampaign.length > 0
+        ? data.UTMCampaign
+        : "No asignado"}
+    />
+    <FormSection
+      title="UTM Term"
+      data={data.UTMTerm && data.UTMTerm.length > 0
+        ? data.UTMTerm
+        : "No asignado"}
+    />
+    <FormSection
+      title="UTM Content"
+      data={data.UTMContent && data.UTMContent.length > 0
+        ? data.UTMContent
+        : "No asignado"}
+    />
+    <p>
+      <span class="font-bold text-lg">Closer:</span>
+      <span class="bg-[#58272d] text-white text-sm w-fit px-2 rounded-lg"
+        >{data.closer.name}</span
+      >
+    </p>
+  </Form>
+</LayoutForm>
+
+<script is:inline>
+  console.log('se ejecuta')
+</script>
+
+<script is:inline type="module" >
+  const isInput = (control) => {
+    const isControl = control instanceof HTMLInputElement;
+    if (!isControl || control == null) return null;
+    return control;
+  };
+  const form = document.getElementById("form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const { elements } = e.currentTarget;
+    const id = isInput(elements.namedItem("id"));
+    const status = isInput(elements.namedItem("optionSelected"));
+    console.log(status.value);
+    try {
+      await window.fetch(
+        "https://hook.us1.make.com/ny1cxb5m9jv6fjp8vdg7nxnl3krmnc9o",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ email: id.value, estado: status.value }),
+        }
+      );
+    } catch (err) {}
+  });
+</script>

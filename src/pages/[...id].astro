@@ -1,0 +1,18 @@
+---
+import EditCloser from "@/components/sections/EditCloser.astro";
+import { getPages } from "@/helper/notion.ts";
+
+const { id } = Astro.params;
+const getData = await getPages({
+  filterBy: {
+    property: "Email",
+    rich_text: {
+      equals: id,
+    },
+  },
+});
+const data = getData.find((data) => data.email === id);
+if (!data) return Astro.redirect("/404");
+---
+
+<EditCloser id={id ?? ""} data={data} pathReturn="/" />

@@ -1,0 +1,68 @@
+---
+import { COLORS } from "@/constants/colors.ts";
+interface Props {
+  currentStatus: string;
+  color: string;
+  options: { label: string; color: string }[];
+}
+const { currentStatus, color, options } = Astro.props;
+---
+
+<div class="group relative w-full">
+  <input
+    hidden
+    id="optionSelected"
+    name="optionSelected"
+    value={currentStatus}
+  />
+  <span
+    id="selected"
+    class={`${COLORS[color]} text-white text-sm w-fit px-2 rounded-lg`}
+  >
+    {currentStatus}
+  </span>
+  <ul
+    class="hidden absolute group-hover:flex flex-col w-auto pr-2 gap-2 border-2 rounded-lg py-2 bg-white"
+  >
+    {
+      options.map((option, index) => (
+        <li
+          class={`option cursor-pointer ${options.length - 1 === index ? "" : "border-b-2 pb-2"}`}
+        >
+          <span
+            class={`${COLORS[option.color]} text-white text-sm w-fit px-2 rounded-lg`}
+          >
+            {option.label}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+<script is:inline type="module">
+  const COLORS_BY_NAME = {
+    Contactado: "bg-[#4b5563]",
+    "Esperando respuesta": "bg-[#ca8a04]",
+    "En llamada": "bg-[#2563eb]",
+    Lose: "bg-[#dc2626]",
+    Win: "bg-[#16a34a]",
+  };
+  const listOfOption = document.querySelectorAll(".option");
+  const selectOption = (e) => {
+    const selected = document.getElementById("selected");
+    const input = document.getElementById("optionSelected");
+    if (selected instanceof HTMLElement) {
+      const lastColor = COLORS_BY_NAME[`${selected.innerText}`];
+      const newColor = COLORS_BY_NAME[`${e.target.innerText}`];
+      selected.innerText = e.target.innerText;
+      selected.classList.remove(lastColor);
+      selected.classList.add(newColor);
+      if (input instanceof HTMLInputElement) {
+        input.value = e.target.innerText;
+      }
+    }
+  };
+  listOfOption.forEach((option) => {
+    option.addEventListener("click", selectOption);
+  });
+</script>

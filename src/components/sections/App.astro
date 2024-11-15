@@ -1,0 +1,52 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCalls } from "@/helper/notion";
+import { getCallsG } from "@/helper/googleSheet";
+import Card from "../Card.astro";
+interface Props {
+  database: string;
+}
+const { database } = Astro.props;
+const getDataBases: {
+  [prop: string]: () => Promise<
+    {
+      agendacion: string;
+      email: string;
+      closer: {
+        name: string;
+        color: string;
+      };
+      status: {
+        name: string;
+        color: string;
+      };
+    }[]
+  >;
+} = {
+  notion: async () => await getCalls(),
+  "google-sheet": async () => await getCallsG(),
+};
+const calls = await getDataBases[database]();
+---
+
+<Layout title="Prueba tecnica MyContent" database={database}>
+  <section class="mx-20 my-10">
+    {
+      calls.map((call) => (
+        <Card
+          path={database === "notion" ? '' : database}
+          agendacion={call.agendacion}
+          email={call.email}
+          closer={call.closer}
+          status={call.status}
+        />
+      ))
+    }
+  </section>
+</Layout>
+<style>
+  section {
+    display: grid;
+    grid-template-areas: "card card card";
+  }
+</style>

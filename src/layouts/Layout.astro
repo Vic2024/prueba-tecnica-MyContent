@@ -1,0 +1,45 @@
+---
+import Logo from "../../public/Logo.jpg";
+import { Image } from "astro:assets";
+import Conections from "@/components/Conections.astro";
+import "../index.css";
+import { ViewTransitions } from "astro:transitions";
+interface Props {
+  title: string;
+  database: string;
+}
+
+const { title, database } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <ViewTransitions />
+    <title>{title}</title>
+  </head>
+  <body class="bg-slate-50">
+    <header class="[grid-area:header] sticky top-0 bg-primary-color flex items-center justify-between px-4">
+      <Image
+      src={Logo}
+      alt="Logo MyContent"
+      width="250"
+      height="45"
+      decoding="async"
+      loading="eager"
+    />
+    <Conections database={database} />
+    </header>
+    <main class="[grid-area:main] bg-slate-200">
+      <slot/>
+    </main>
+    <footer class="[grid-area:footer] bg-[#666666] text-white text-small-text font-bold flex justify-center items-center">
+      🔒 Copyright por MyContent 🔒
+    </footer>
+  </body>
+</html>

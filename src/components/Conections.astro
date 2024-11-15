@@ -1,0 +1,38 @@
+---
+import { SELECT_CONECTIOS } from "@/constants/conections.ts";
+
+interface Props {
+  database: string;
+}
+const { database } = Astro.props;
+const findDatabase = SELECT_CONECTIOS.find(
+  (conection) => conection.name === database
+);
+const otherConections = SELECT_CONECTIOS.filter(
+  (conection) => conection.name !== database
+);
+---
+
+<div class="relative group">
+  <div
+    class="rounded-xl cursor-pointer px-4 py-2 flex gap-2 items-center bg-white text-primary-color font-bold"
+  >
+    <div class="size-4 rounded-full bg-green-600"></div>
+    conectado a {findDatabase ? findDatabase.label : ""}
+  </div>
+  <ul
+    class="opacity-0 top-[2.6rem] rounded-xl bg-white absolute transition-all group-hover:opacity-100 w-full"
+  >
+    {
+      otherConections.map((conection) => (
+        <a
+          href={conection.path}
+          class="cursor-pointer px-4 py-2 flex gap-2 items-center text-primary-color font-bold hover:text-primary-color/60 transition-all"
+        >
+          <div class="size-4 rounded-full bg-red-600" />
+          {conection.label}
+        </a>
+      ))
+    }
+  </ul>
+</div>

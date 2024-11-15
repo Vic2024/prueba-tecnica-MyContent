@@ -1,0 +1,20 @@
+---
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<section
+  class="mx-60 flex flex-col gap-4 px-4 py-2 bg-white rounded-xl shadow-1 my-10"
+>
+  <h1 class="text-h1 text-text-color font-bold">{id}</h1>
+  <form id="form" class="flex-1 flex flex-col gap-4 p-4">
+    <input type="text" name="id" readonly hidden value={id} />
+    <slot />
+    <button
+      class="self-center w-[30%] py-1 rounded-lg bg-primary-color text-white transition-all hover:bg-primary-color/70"
+      type="submit">Enviar</button
+    >
+  </form>
+</section>
